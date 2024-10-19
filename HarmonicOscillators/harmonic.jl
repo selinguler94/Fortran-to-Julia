@@ -83,6 +83,25 @@ begin
 	end
 end
 
+# ╔═╡ 15fcde99-54bb-4736-b680-7f4bfef94a1c
+md"""
+Here E0 = Nhω/2 ¯ is the energy of N oscillators in the ground state. The example above with the
+three dice (question 2) corresponds to a system of N = 3 harmonic oscillators with ¯hω =  = 1
+and E0 = 0. In this example the individual energy levels are restricted to k = 1, 2 · · · 6 and
+the total energy is E = 12. The probability for each of the six possible energy distributions
+can be calculated explicitly. This is not possible in general. Using smart analytical approaches
+one may derive the form of the most probable distribution (see section 1.4). Before following
+this route we investigate the possible energy distributions “experimentally”, i.e. using a simple
+computer simulation (question 4). The computer program simulates a system of N harmonic
+oscillators, each of which may have an energy E (n) = 0,hω, 2 ¯ hω, ¯ · · · (note that we did not lose
+any information by choosing the ground state energy at E0 = 0), see Fig. 1.1. The total energy E
+and the number of oscillators N are input for the program. One step in the simulation consists
+of selecting two different oscillators A and B at random. Next, the program attempts to increase
+the energy of oscillator A by ¯hω and at the same time decrease the energy of B by ¯hω. If the
+energy of B becomes negative, the trial is rejected. Output of the program are “snapshots”, i.e.
+the energies of all individual oscillators, after t simulation steps.
+"""
+
 # ╔═╡ f29bf0b8-8751-467e-9fdb-77cca89000ef
 begin
 #     Initialize
@@ -1287,6 +1306,7 @@ version = "1.4.1+1"
 # ╠═4f2520bc-ce65-4549-947a-6cf1adbf3d37
 # ╠═048c5cfb-04f2-4488-9997-035a87ee4da4
 # ╠═fad4cc45-b3a5-42bc-8e34-0f69abab5ae1
+# ╟─15fcde99-54bb-4736-b680-7f4bfef94a1c
 # ╠═f29bf0b8-8751-467e-9fdb-77cca89000ef
 # ╠═4b62b316-778f-4c8e-89ca-3b4eaff81413
 # ╠═257dbbcd-ee14-49b9-b596-1e4c627f948a
