@@ -155,6 +155,7 @@ Et = []
 
 # ╔═╡ ce1d752b-9cd5-4942-b949-ffd04548628c
 begin
+histograms = []
 		for I in 1:Numberofcycles
 			empty!(Et)
 		    for J in 1:100
@@ -198,9 +199,25 @@ begin
 		       		Energysum2 += Float64(E)^2
 		       		Count += 1.0
 				end
-			end	
+			end
+		    indices = collect(1:length(Oscillator))
+	
+			p1 = histogram(indices, weights=Oscillator, bins=length(Oscillator),
+			  xlabel="Nth Oscillator", ylabel="Energy", 
+	          title="Energy of Each Oscillator", 
+	          legend=false)
+			push!(histograms, p1)
 		end
 	Count2 = Count
+end
+
+# ╔═╡ d3f5117d-60f3-4a74-b233-9ac6ee452a3d
+begin
+	anim = @animate for hist in histograms
+		plot(hist)
+	end
+	
+	gif(anim, "mygif.gif", fps = 1)
 end
 
 # ╔═╡ 886bea7a-fd06-4547-b741-656e5f09bf92
@@ -230,6 +247,9 @@ for i in results
 	println(i)
 end
 
+# ╔═╡ 67cdb139-9e13-4e80-ab8e-598407d1eea9
+
+
 # ╔═╡ ab56eedb-cfa9-41c3-8aac-c00b5ced8db9
 begin
 	n = 0
@@ -240,11 +260,15 @@ begin
 end
 
 # ╔═╡ 99e0bd9d-f935-4c1a-b460-beee315caa88
-histogram(0:Totalenergy, Distribution/Numberofoscillators, bins=10, 
-          title="Histogram of Distribution", 
-          xlabel="Energy Levels", 
-          ylabel="Frequency", 
-          legend=false)
+begin
+	indice = collect(1:length(Oscillator))
+	
+	histogram(Oscillator/Numberofoscillators, weights=indice, bins=10, 
+	          title="Histogram of Distribution", 
+	          xlabel="Energy Levels", 
+	          ylabel="Frequency", 
+	          legend=false)
+end
 
 # ╔═╡ 23374288-849f-4359-a0d2-d21f8287e679
 html"""
@@ -1386,12 +1410,14 @@ version = "1.4.1+1"
 # ╠═eefe2f30-c8c5-4cd6-acc8-b35782f967da
 # ╠═faf7a2fb-28ca-4d0d-94e2-82231d9cf22b
 # ╠═ce1d752b-9cd5-4942-b949-ffd04548628c
+# ╠═d3f5117d-60f3-4a74-b233-9ac6ee452a3d
 # ╠═886bea7a-fd06-4547-b741-656e5f09bf92
 # ╠═b5867102-0087-4531-a4a5-f4df0bd09d3b
 # ╠═17f6c6ac-7d23-47d9-a5f0-de7b8bfe2cb1
 # ╠═415df18c-75d6-4f2d-ad9c-06b1bcf2ce3f
 # ╠═55916675-22db-4bed-93dc-8ef1ab7f36ef
 # ╠═c865d842-7dd3-42aa-a397-ef42b4579240
+# ╠═67cdb139-9e13-4e80-ab8e-598407d1eea9
 # ╟─ab56eedb-cfa9-41c3-8aac-c00b5ced8db9
 # ╠═99e0bd9d-f935-4c1a-b460-beee315caa88
 # ╟─23374288-849f-4359-a0d2-d21f8287e679
