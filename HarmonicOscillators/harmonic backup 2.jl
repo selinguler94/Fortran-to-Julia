@@ -102,46 +102,30 @@ energy of B becomes negative, the trial is rejected. Output of the program are �
 the energies of all individual oscillators, after t simulation steps.
 """
 
-# ╔═╡ baef1d30-f765-424b-aaf7-467efb4894c0
-Oscillator = zeros(Int,Numberofoscillators)
-
-# ╔═╡ 9da8bf05-63c3-4464-8689-f091e3356b5f
-Distribution = zeros(Float64, Totalenergy + 1)
-
-# ╔═╡ 280ef48b-fb9f-4336-b9cb-928c027ee5ad
-Ninit = Numberofcycles ÷ 2
-
-# ╔═╡ 404d4b92-d07a-44cf-88b3-9ec6a268a75e
-Maxenergy = 100000
-
-# ╔═╡ cc142827-d85b-4c09-8053-e723304c2f4e
-Maxoscillators = 100000
-
-# ╔═╡ d585076c-fb35-412a-9d51-048c91e2fb79
-Energysum = 0.0
-
-# ╔═╡ 926ab91b-4984-4a6b-83b6-b7020be47831
-Energysum2 = 0.0
-
-# ╔═╡ 624e47ab-e1c5-42fa-9e91-2475cf66c680
-Count = 0.0
-
-# ╔═╡ 94f533a1-00c4-44f1-a1a9-277ef21018e6
-Utot = 0
+# ╔═╡ f29bf0b8-8751-467e-9fdb-77cca89000ef
+begin
+#     Initialize
+	Oscillator = zeros(Int,Numberofoscillators)
+	Distribution = zeros(Float64, Totalenergy + 1)
+	Ninit = Numberofcycles ÷ 2
+	Maxenergy = 100000
+	Maxoscillators = 100000
+	Energysum = 0.0
+	Energysum2 = 0.0
+	Count = 0.0
+	Utot = 0
+end
 
 # ╔═╡ 4b62b316-778f-4c8e-89ca-3b4eaff81413
 begin
 	## Make An Initial Distribution Of The Total
 	## Energy Over The Levels
 	while Utot != Totalenergy
-		Utot += 1
+	  i = rand(1:Numberofoscillators)
+	  Oscillator[i] += 1
+	  Utot += 1
 	end
 	println("Initial Energy                            : $Utot")
-end
-
-# ╔═╡ d1defbbf-3ac5-4ec7-ad81-d236fa5e7765
-for i in 1:length(Oscillator)
-	Oscillator[i] = 1
 end
 
 # ╔═╡ 257dbbcd-ee14-49b9-b596-1e4c627f948a
@@ -151,63 +135,66 @@ Np=0
 zero(Utot)
 
 # ╔═╡ faf7a2fb-28ca-4d0d-94e2-82231d9cf22b
-Et = []
+Et=[]
 
-# ╔═╡ ce1d752b-9cd5-4942-b949-ffd04548628c
+# ╔═╡ 8b6d453a-6ee4-4ae8-8944-4faa1eada0d2
+# Loop Over All Cycles
 begin
-		for I in 1:Numberofcycles
-			empty!(Et)
-		    for J in 1:100
-		        for K in 1:Numberofoscillators
-		            # Choose 2 Different Levels At Random
-		            Osca = rand(1:Numberofoscillators)
-		            Oscb = rand(1:Numberofoscillators)
-		
-		            if Osca == Oscb
-		                continue
-					end
-		
-		            if rand() < 0.5
-		                A = 1
-		                B = -1
-		            else
-		                A = -1
-		                B = 1
-		            end
-		
-		            # Reject When E<0
-		            if min(Oscillator[Osca] + A, Oscillator[Oscb] + B) >= 0
-		                Oscillator[Osca] += A
-		                Oscillator[Oscb] += B
-					end
-		        end
-		
-		    	if I >= Ninit
-					E = 0
-					for i in 1:Group
-		        	 	E = E + Oscillator[i]
-					end
-		
-		       		if Np < 10000000
-		         		Np += 1
-		            	push!(Et, E)
-		        	end
-		
-		     		Distribution[E+1] += 1.0
-		    		Energysum += Float64(E)
-		       		Energysum2 += Float64(E)^2
-		       		Count += 1.0
+    for I in 1:Numberofcycles
+        for J in 1:100
+            for K in 1:Numberofoscillators
+                # Choose 2 Different Levels At Random
+                Osca = rand(1:Numberofoscillators)
+                Oscb = rand(1:Numberofoscillators)
+
+                if Osca == Oscb
+                    continue
+                end
+
+                if rand() < 0.5
+                    A = 1
+                    B = -1
+                else
+                    A = -1
+                    B = 1
+                end
+
+                # Reject When E<0
+                if min(Oscillator[Osca] + A, Oscillator[Oscb] + B) >= 0
+                    Oscillator[Osca] += A
+                    Oscillator[Oscb] += B
+                end
+            end
+
+        # Sample
+        	if I >= Ninit
+				E = 0
+				for i in 1:Group
+            		E = E + Oscillator[i]
 				end
-			end	
+
+            	if Np < 10000000
+               		Np += 1
+                	push!(Et, E)
+            	end
+
+            	Distribution[E+1] += 1.0
+            	Energysum += Float64(E)
+            	Energysum2 += Float64(E)^2
+            	Count += 1.0
+        	end
 		end
-	Count2 = Count
+	end
 end
+
+# ╔═╡ 038b63c7-fa46-4255-b5c1-b64c7f250d24
+print(Count)
+
+# ╔═╡ 3245d2c2-2eff-4e47-9503-747191dd4e6a
+gr()
 
 # ╔═╡ 886bea7a-fd06-4547-b741-656e5f09bf92
 zero(Utot)
-
-# ╔═╡ b5867102-0087-4531-a4a5-f4df0bd09d3b
-print(Et)
 
 # ╔═╡ 17f6c6ac-7d23-47d9-a5f0-de7b8bfe2cb1
 for i in 1:Numberofoscillators
@@ -218,17 +205,15 @@ end
 results = []
 
 # ╔═╡ 55916675-22db-4bed-93dc-8ef1ab7f36ef
-for i in 1:Totalenergy
+for i in 1:Numberofoscillators
 	if Distribution[i] >= 0.5
-		k = Distribution[i] / Count2
-		push!(results, "$i         $k")
+		k = Distribution[i] / Count
+		push!(results, "$i $k")
 	end
 end
 
 # ╔═╡ c865d842-7dd3-42aa-a397-ef42b4579240
-for i in results
-	println(i)
-end
+print(results)
 
 # ╔═╡ ab56eedb-cfa9-41c3-8aac-c00b5ced8db9
 begin
@@ -240,7 +225,7 @@ begin
 end
 
 # ╔═╡ 99e0bd9d-f935-4c1a-b460-beee315caa88
-histogram(0:Totalenergy, Distribution/Numberofoscillators, bins=10, 
+histogram(0:Totalenergy, Oscillator/Numberofoscillators, bins=10, 
           title="Histogram of Distribution", 
           xlabel="Energy Levels", 
           ylabel="Frequency", 
@@ -267,11 +252,13 @@ PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
+Pluto = "c3e4b0f8-55cb-11ea-2926-15256bba5781"
 Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
 [compat]
 Plots = "~1.40.8"
+Pluto = "~0.19.46"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -280,7 +267,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.10.4"
 manifest_format = "2.0"
-project_hash = "edffd25fcc21f12834fc64911952bd25a2e6c428"
+project_hash = "f25c86ac4d87d3630d421324773222b47dc49f2c"
 
 [[deps.ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
@@ -366,6 +353,12 @@ git-tree-sha1 = "ea32b83ca4fefa1768dc84e504cc0a94fb1ab8d1"
 uuid = "f0e56b4a-5159-44fe-b623-3e5288b988bb"
 version = "2.4.2"
 
+[[deps.Configurations]]
+deps = ["ExproniconLite", "OrderedCollections", "TOML"]
+git-tree-sha1 = "4358750bb58a3caefd5f37a4a0c5bfdbbf075252"
+uuid = "5218b696-f38b-4ac9-8b61-a12ec717816d"
+version = "0.17.6"
+
 [[deps.Contour]]
 git-tree-sha1 = "439e35b0b36e2e5881738abc8857bd92ad6ff9a8"
 uuid = "d38c429a-6771-53c6-b99e-75d170b6e991"
@@ -382,6 +375,11 @@ git-tree-sha1 = "1d0a14036acb104d9e89698bd408f63ab58cdc82"
 uuid = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
 version = "0.18.20"
 
+[[deps.DataValueInterfaces]]
+git-tree-sha1 = "bfc1187b79289637fa0ef6d4436ebdfe6905cbd6"
+uuid = "e2d170a0-9d28-54be-80f0-106bbe20a464"
+version = "1.0.0"
+
 [[deps.Dates]]
 deps = ["Printf"]
 uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
@@ -397,6 +395,10 @@ deps = ["Mmap"]
 git-tree-sha1 = "9e2f36d3c96a820c678f2f1f1782582fcf685bae"
 uuid = "8bb1440f-4735-579b-a4ab-409b98df4dab"
 version = "1.9.1"
+
+[[deps.Distributed]]
+deps = ["Random", "Serialization", "Sockets"]
+uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
 
 [[deps.DocStringExtensions]]
 deps = ["LibGit2"]
@@ -426,6 +428,16 @@ deps = ["Artifacts", "JLLWrappers", "Libdl"]
 git-tree-sha1 = "1c6317308b9dc757616f0b5cb379db10494443a7"
 uuid = "2e619515-83b5-522b-bb60-26c02a35a201"
 version = "2.6.2+0"
+
+[[deps.ExpressionExplorer]]
+git-tree-sha1 = "0889fdf7ac69b67b65f54b763941967e0a08b7b3"
+uuid = "21656369-7473-754a-2065-74616d696c43"
+version = "1.0.4"
+
+[[deps.ExproniconLite]]
+git-tree-sha1 = "4c9ed87a6b3cd90acf24c556f2119533435ded38"
+uuid = "55351af7-c7e9-48d6-89ff-24e801d99491"
+version = "0.10.13"
 
 [[deps.FFMPEG]]
 deps = ["FFMPEG_jll"]
@@ -470,6 +482,12 @@ deps = ["Artifacts", "JLLWrappers", "Libdl"]
 git-tree-sha1 = "1ed150b39aebcc805c26b93a8d0122c940f64ce2"
 uuid = "559328eb-81f9-559d-9380-de523a88c83c"
 version = "1.0.14+0"
+
+[[deps.FuzzyCompletions]]
+deps = ["REPL"]
+git-tree-sha1 = "40ec72c57559a4473961bbcd12c96bcd4c2aaab4"
+uuid = "fb4132e2-a121-4a70-b8a1-d5b831dcdcc2"
+version = "0.5.4"
 
 [[deps.GLFW_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libglvnd_jll", "Xorg_libXcursor_jll", "Xorg_libXi_jll", "Xorg_libXinerama_jll", "Xorg_libXrandr_jll", "libdecor_jll", "xkbcommon_jll"]
@@ -524,6 +542,12 @@ git-tree-sha1 = "401e4f3f30f43af2c8478fc008da50096ea5240f"
 uuid = "2e76f6c2-a576-52d4-95c1-20adfe4de566"
 version = "8.3.1+0"
 
+[[deps.HypertextLiteral]]
+deps = ["Tricks"]
+git-tree-sha1 = "7134810b1afce04bbc1045ca1985fbe81ce17653"
+uuid = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
+version = "0.9.5"
+
 [[deps.InteractiveUtils]]
 deps = ["Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
@@ -532,6 +556,11 @@ uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 git-tree-sha1 = "630b497eafcc20001bba38a4651b327dcfc491d2"
 uuid = "92d709cd-6900-40b7-9082-c6be49f344b6"
 version = "0.2.2"
+
+[[deps.IteratorInterfaceExtensions]]
+git-tree-sha1 = "a3f24677c21f5bbe9d2a714f95dcd58337fb2856"
+uuid = "82899510-4779-5014-852e-03e436cf321d"
+version = "1.0.0"
 
 [[deps.JLFzf]]
 deps = ["Pipe", "REPL", "Random", "fzf_jll"]
@@ -601,6 +630,11 @@ version = "0.16.5"
     DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
     SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
     SymEngine = "123dc426-2d89-5057-bbad-38513e3affd8"
+
+[[deps.LazilyInitializedFields]]
+git-tree-sha1 = "8f7f3cabab0fd1800699663533b6d5cb3fc0e612"
+uuid = "0e77f7df-68c5-4e49-93ce-4cd80f5598bf"
+version = "1.2.2"
 
 [[deps.LibCURL]]
 deps = ["LibCURL_jll", "MozillaCACerts_jll"]
@@ -706,11 +740,22 @@ git-tree-sha1 = "c1dd6d7978c12545b4179fb6153b9250c96b0075"
 uuid = "e6f89c97-d47a-5376-807f-9c37f3926c36"
 version = "1.0.3"
 
+[[deps.MIMEs]]
+git-tree-sha1 = "65f28ad4b594aebe22157d6fac869786a255b7eb"
+uuid = "6c6e2e6c-3030-632d-7369-2d6c69616d65"
+version = "0.1.4"
+
 [[deps.MacroTools]]
 deps = ["Markdown", "Random"]
 git-tree-sha1 = "2fa9ee3e63fd3a4f7a9a4f4744a52f4856de82df"
 uuid = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
 version = "0.5.13"
+
+[[deps.Malt]]
+deps = ["Distributed", "Logging", "RelocatableFolders", "Serialization", "Sockets"]
+git-tree-sha1 = "18cf4151e390fce29ca846b92b06baf9bc6e002e"
+uuid = "36869731-bdee-424d-aa32-cab38c994e3b"
+version = "1.1.1"
 
 [[deps.Markdown]]
 deps = ["Base64"]
@@ -744,6 +789,12 @@ uuid = "a63ad114-7e13-5084-954f-fe012c677804"
 [[deps.MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
 version = "2023.1.10"
+
+[[deps.MsgPack]]
+deps = ["Serialization"]
+git-tree-sha1 = "f5db02ae992c260e4826fe78c942954b48e1d9c2"
+uuid = "99f44e22-a591-53d1-9472-aa23ef4bd671"
+version = "1.2.1"
 
 [[deps.NaNMath]]
 deps = ["OpenLibm_jll"]
@@ -859,6 +910,23 @@ version = "1.40.8"
     ImageInTerminal = "d8c32880-2388-543b-8c61-d9f865259254"
     Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 
+[[deps.Pluto]]
+deps = ["Base64", "Configurations", "Dates", "Downloads", "ExpressionExplorer", "FileWatching", "FuzzyCompletions", "HTTP", "HypertextLiteral", "InteractiveUtils", "Logging", "LoggingExtras", "MIMEs", "Malt", "Markdown", "MsgPack", "Pkg", "PlutoDependencyExplorer", "PrecompileSignatures", "PrecompileTools", "REPL", "RegistryInstances", "RelocatableFolders", "Scratch", "Sockets", "TOML", "Tables", "URIs", "UUIDs"]
+git-tree-sha1 = "73a74a03ac427363c4764f956f34b75e93f71514"
+uuid = "c3e4b0f8-55cb-11ea-2926-15256bba5781"
+version = "0.19.46"
+
+[[deps.PlutoDependencyExplorer]]
+deps = ["ExpressionExplorer", "InteractiveUtils", "Markdown"]
+git-tree-sha1 = "4bc5284f77d731196d3e97f23abb732ad6f2a6e4"
+uuid = "72656b73-756c-7461-726b-72656b6b696b"
+version = "1.0.4"
+
+[[deps.PrecompileSignatures]]
+git-tree-sha1 = "18ef344185f25ee9d51d80e179f8dad33dc48eb1"
+uuid = "91cefc8d-f054-46dc-8f8c-26e11d7c5411"
+version = "3.0.3"
+
 [[deps.PrecompileTools]]
 deps = ["Preferences"]
 git-tree-sha1 = "5aa36f7049a63a1528fe8f7c3f2113413ffd4e1f"
@@ -923,6 +991,12 @@ version = "0.6.12"
 git-tree-sha1 = "45e428421666073eab6f2da5c9d310d99bb12f9b"
 uuid = "189a3867-3050-52da-a836-e630ba90ab69"
 version = "1.2.2"
+
+[[deps.RegistryInstances]]
+deps = ["LazilyInitializedFields", "Pkg", "TOML", "Tar"]
+git-tree-sha1 = "ffd19052caf598b8653b99404058fce14828be51"
+uuid = "2792f1a3-b283-48e8-9a74-f99dce5104f3"
+version = "0.1.0"
 
 [[deps.RelocatableFolders]]
 deps = ["SHA", "Scratch"]
@@ -1001,6 +1075,18 @@ deps = ["Dates"]
 uuid = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
 version = "1.0.3"
 
+[[deps.TableTraits]]
+deps = ["IteratorInterfaceExtensions"]
+git-tree-sha1 = "c06b2f539df1c6efa794486abfb6ed2022561a39"
+uuid = "3783bdb8-4a98-5b6b-af9a-565f29a5fe9c"
+version = "1.0.1"
+
+[[deps.Tables]]
+deps = ["DataAPI", "DataValueInterfaces", "IteratorInterfaceExtensions", "OrderedCollections", "TableTraits"]
+git-tree-sha1 = "598cd7c1f68d1e205689b1c2fe65a9f85846f297"
+uuid = "bd369af6-aec1-5ad0-b16a-f7cc5008161c"
+version = "1.12.0"
+
 [[deps.Tar]]
 deps = ["ArgTools", "SHA"]
 uuid = "a4e569a6-e804-4fa4-b0f3-eef7a1d5b13e"
@@ -1020,6 +1106,11 @@ uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 git-tree-sha1 = "e84b3a11b9bece70d14cce63406bbc79ed3464d2"
 uuid = "3bb67fe8-82b1-5028-8e26-92a6c54297fa"
 version = "0.11.2"
+
+[[deps.Tricks]]
+git-tree-sha1 = "7822b97e99a1672bfb1b49b668a6d46d58d8cbcb"
+uuid = "410a4b4d-49e4-4fbc-ab6d-cb71b17b3775"
+version = "0.1.9"
 
 [[deps.URIs]]
 git-tree-sha1 = "67db6cc7b3821e19ebe75791a9dd19c9b1188f2b"
@@ -1371,28 +1462,20 @@ version = "1.4.1+1"
 # ╟─fb35ea81-cf4f-4adc-8591-7aeb3a869b8f
 # ╠═fad4cc45-b3a5-42bc-8e34-0f69abab5ae1
 # ╟─15fcde99-54bb-4736-b680-7f4bfef94a1c
-# ╠═baef1d30-f765-424b-aaf7-467efb4894c0
-# ╠═9da8bf05-63c3-4464-8689-f091e3356b5f
-# ╠═280ef48b-fb9f-4336-b9cb-928c027ee5ad
-# ╠═404d4b92-d07a-44cf-88b3-9ec6a268a75e
-# ╠═cc142827-d85b-4c09-8053-e723304c2f4e
-# ╠═d585076c-fb35-412a-9d51-048c91e2fb79
-# ╠═926ab91b-4984-4a6b-83b6-b7020be47831
-# ╠═624e47ab-e1c5-42fa-9e91-2475cf66c680
-# ╠═94f533a1-00c4-44f1-a1a9-277ef21018e6
+# ╠═f29bf0b8-8751-467e-9fdb-77cca89000ef
 # ╠═4b62b316-778f-4c8e-89ca-3b4eaff81413
-# ╠═d1defbbf-3ac5-4ec7-ad81-d236fa5e7765
 # ╠═257dbbcd-ee14-49b9-b596-1e4c627f948a
 # ╠═eefe2f30-c8c5-4cd6-acc8-b35782f967da
 # ╠═faf7a2fb-28ca-4d0d-94e2-82231d9cf22b
-# ╠═ce1d752b-9cd5-4942-b949-ffd04548628c
+# ╠═8b6d453a-6ee4-4ae8-8944-4faa1eada0d2
+# ╠═038b63c7-fa46-4255-b5c1-b64c7f250d24
+# ╠═3245d2c2-2eff-4e47-9503-747191dd4e6a
 # ╠═886bea7a-fd06-4547-b741-656e5f09bf92
-# ╠═b5867102-0087-4531-a4a5-f4df0bd09d3b
 # ╠═17f6c6ac-7d23-47d9-a5f0-de7b8bfe2cb1
 # ╠═415df18c-75d6-4f2d-ad9c-06b1bcf2ce3f
 # ╠═55916675-22db-4bed-93dc-8ef1ab7f36ef
 # ╠═c865d842-7dd3-42aa-a397-ef42b4579240
-# ╟─ab56eedb-cfa9-41c3-8aac-c00b5ced8db9
+# ╠═ab56eedb-cfa9-41c3-8aac-c00b5ced8db9
 # ╠═99e0bd9d-f935-4c1a-b460-beee315caa88
 # ╟─23374288-849f-4359-a0d2-d21f8287e679
 # ╟─00000000-0000-0000-0000-000000000001
