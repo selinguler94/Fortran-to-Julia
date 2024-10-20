@@ -205,7 +205,7 @@ results = []
 for i in 1:Numberofoscillators
 	if Distribution[i] >= 0.5
 		print(Distribution[i])
-		k = Distribution[i] / Count
+		k = Distribution[i] / 251
 		println(k)
 		push!(results, "$i $k")
 	end
@@ -1339,10 +1339,10 @@ version = "1.4.1+1"
 # ╔═╡ Cell order:
 # ╟─873a88a2-1608-461f-b434-313ee52c9839
 # ╟─20d662db-e52b-4fa5-b835-9fd539f483b6
-# ╟─f7000470-7486-4498-952e-efe18aca4089
-# ╟─fb35ea81-cf4f-4adc-8591-7aeb3a869b8f
 # ╠═4f2520bc-ce65-4549-947a-6cf1adbf3d37
 # ╠═048c5cfb-04f2-4488-9997-035a87ee4da4
+# ╟─f7000470-7486-4498-952e-efe18aca4089
+# ╟─fb35ea81-cf4f-4adc-8591-7aeb3a869b8f
 # ╠═fad4cc45-b3a5-42bc-8e34-0f69abab5ae1
 # ╟─15fcde99-54bb-4736-b680-7f4bfef94a1c
 # ╠═f29bf0b8-8751-467e-9fdb-77cca89000ef
