@@ -123,11 +123,14 @@ begin
 	  Oscillator[i] += 1
 	  Utot += 1
 	end
-	println("\nInitial Energy                            : $Utot")
+	println("Initial Energy                            : $Utot")
 end
 
 # ╔═╡ 257dbbcd-ee14-49b9-b596-1e4c627f948a
 Np=0
+
+# ╔═╡ faf7a2fb-28ca-4d0d-94e2-82231d9cf22b
+Et=[]
 
 # ╔═╡ 8b6d453a-6ee4-4ae8-8944-4faa1eada0d2
 # Loop Over All Cycles
@@ -161,11 +164,14 @@ begin
 
         # Sample
         if I >= Ninit
-            E = sum(Oscillator[1:Group])
+			E = 0
+			for i in 1:Group
+            	E = E + Oscillator[i]
+			end
 
             if Np < 10000000
                 Np += 1
-                println(E)
+                push!(Et, E)
             end
 
             Distribution[E+1] += 1.0
@@ -173,8 +179,40 @@ begin
             Energysum2 += Float64(E)^2
             Count += 1.0
         end
+		print(Count)
     end
+	print(Count)
 end
+
+# ╔═╡ 038b63c7-fa46-4255-b5c1-b64c7f250d24
+print(Count)
+
+# ╔═╡ a870b6b4-d66b-4755-9b7d-18bc67aa86e9
+print(length(Et)) # why is this 250 though???
+
+# ╔═╡ 886bea7a-fd06-4547-b741-656e5f09bf92
+zero(Utot)
+
+# ╔═╡ 17f6c6ac-7d23-47d9-a5f0-de7b8bfe2cb1
+for i in 1:Numberofoscillators
+	Utot = Utot + Oscillator[i]
+end
+
+# ╔═╡ 415df18c-75d6-4f2d-ad9c-06b1bcf2ce3f
+results = []
+
+# ╔═╡ 55916675-22db-4bed-93dc-8ef1ab7f36ef
+for i in 1:Numberofoscillators
+	if Distribution[i] >= 0.5
+		print(Distribution[i])
+		k = Distribution[i] / Count
+		println(k)
+		push!(results, "$i $k")
+	end
+end
+
+# ╔═╡ c865d842-7dd3-42aa-a397-ef42b4579240
+print(results)
 
 # ╔═╡ 99e0bd9d-f935-4c1a-b460-beee315caa88
 histogram(0:Totalenergy, Distribution/Numberofoscillators, bins=10, 
@@ -1310,7 +1348,15 @@ version = "1.4.1+1"
 # ╠═f29bf0b8-8751-467e-9fdb-77cca89000ef
 # ╠═4b62b316-778f-4c8e-89ca-3b4eaff81413
 # ╠═257dbbcd-ee14-49b9-b596-1e4c627f948a
+# ╠═faf7a2fb-28ca-4d0d-94e2-82231d9cf22b
 # ╠═8b6d453a-6ee4-4ae8-8944-4faa1eada0d2
+# ╠═038b63c7-fa46-4255-b5c1-b64c7f250d24
+# ╠═a870b6b4-d66b-4755-9b7d-18bc67aa86e9
+# ╠═886bea7a-fd06-4547-b741-656e5f09bf92
+# ╠═17f6c6ac-7d23-47d9-a5f0-de7b8bfe2cb1
+# ╠═415df18c-75d6-4f2d-ad9c-06b1bcf2ce3f
+# ╠═55916675-22db-4bed-93dc-8ef1ab7f36ef
+# ╠═c865d842-7dd3-42aa-a397-ef42b4579240
 # ╠═7ab3941b-0823-4842-8bad-5fe961b46e46
 # ╠═99e0bd9d-f935-4c1a-b460-beee315caa88
 # ╟─23374288-849f-4359-a0d2-d21f8287e679
