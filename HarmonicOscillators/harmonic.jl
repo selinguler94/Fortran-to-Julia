@@ -204,7 +204,6 @@ histograms = []
 	
 			p1 = histogram(indices, weights=Oscillator, bins=length(Oscillator),
 			  xlabel="Nth Oscillator", ylabel="Energy", 
-	          title="Energy of Each Oscillator", 
 	          legend=false)
 			push!(histograms, p1)
 		end
@@ -226,6 +225,15 @@ zero(Utot)
 # ╔═╡ b5867102-0087-4531-a4a5-f4df0bd09d3b
 print(Et)
 
+# ╔═╡ 1cd7fbb0-de39-4382-9302-3270ee7918b8
+begin
+	anim2 = @animate for i in Et
+		p = (i, Numberofcycles)
+		histogram(p)
+	end
+	gif(anim2, "mygifff.gif", fps=1)
+end
+
 # ╔═╡ 17f6c6ac-7d23-47d9-a5f0-de7b8bfe2cb1
 for i in 1:Numberofoscillators
 	Utot = Utot + Oscillator[i]
@@ -238,7 +246,7 @@ results = []
 for i in 1:Totalenergy
 	if Distribution[i] >= 0.5
 		k = Distribution[i] / Count2
-		push!(results, "$i         $k")
+		push!(results, "$k")
 	end
 end
 
@@ -248,7 +256,7 @@ for i in results
 end
 
 # ╔═╡ 67cdb139-9e13-4e80-ab8e-598407d1eea9
-
+plot(results)
 
 # ╔═╡ ab56eedb-cfa9-41c3-8aac-c00b5ced8db9
 begin
@@ -262,6 +270,7 @@ end
 # ╔═╡ 99e0bd9d-f935-4c1a-b460-beee315caa88
 begin
 	indice = collect(1:length(Oscillator))
+	print(length(Oscillator))
 	
 	histogram(Oscillator/Numberofoscillators, weights=indice, bins=10, 
 	          title="Histogram of Distribution", 
@@ -1413,6 +1422,7 @@ version = "1.4.1+1"
 # ╠═d3f5117d-60f3-4a74-b233-9ac6ee452a3d
 # ╠═886bea7a-fd06-4547-b741-656e5f09bf92
 # ╠═b5867102-0087-4531-a4a5-f4df0bd09d3b
+# ╠═1cd7fbb0-de39-4382-9302-3270ee7918b8
 # ╠═17f6c6ac-7d23-47d9-a5f0-de7b8bfe2cb1
 # ╠═415df18c-75d6-4f2d-ad9c-06b1bcf2ce3f
 # ╠═55916675-22db-4bed-93dc-8ef1ab7f36ef
