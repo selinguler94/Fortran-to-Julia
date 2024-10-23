@@ -15,25 +15,44 @@ md"""# Probability of States in Isolated Systems"""
 
 # ╔═╡ 20d662db-e52b-4fa5-b835-9fd539f483b6
 md"""
-We first consider isolated systems that do not exchange energy with the environment. This
-means that the system is perfectly isolated from the environment so that there is no heat transfer
-with the environment and no radiation enters or escapes the system. Moreover, no work (either
-mechanical or chemical) is performed on or by the system. Mechanical work can be achieved
-by compressing or expanding the system while chemical work corresponds to a flux of particles
-that go in or out of the system. Therefore, isolated systems have a constant volume V (and
-shape), a constant number of particles N, and a constant energy E.
-Although the total energy of an isolated system is constant, the individual atoms may have
-different energies. E.g. in a gas the collisions between the particles will lead to energy exchanges
-and to many different positions, velocities and energies of the individual atoms. If one could
-make a high speed movie with atomic resolution, each of the images would be different (as all
-atomic positions and velocities would be different). One might think that the distribution of
-positions and velocities depends on the type of collisions in the gas. Many experimental and
-theoretical investigations have made it plausible that this idea is incorrect. Instead, we have
-the so-called hypothesis of equal a priori probability (also called the fundamental assumption): All
-possible configurations of the system which have the same total energy are equally likely. Here a configuration means a complete description of all the degrees of freedom of all entities in the system.
-In the case of a classical description of a mono-atomic gas this means that a configuration is
-fully described by all positions and velocities of all atoms. For a quantum mechanical gas of
-non-interacting molecules all quantum numbers for all atoms should be given.
+We first consider isolated systems that do not exchange energy with the environment. Isolated systems do not exchange energy with their environment. This means that no heat transfer, radiation, or mechanical/chemical work occurs, keeping variables like volume, number of particles, and total energy constant. While the total energy remains fixed, individual particles (such as atoms in a gas) can have different energies due to collisions. Despite this, the hypothesis of equal a priori probability states that all configurations of the system, with the same total energy, are equally likely. In classical systems, this configuration includes all positions and velocities of particles, while in quantum systems, it includes all quantum states.
+"""
+
+# ╔═╡ f7000470-7486-4498-952e-efe18aca4089
+md"""### Harmonic Oscillators"""
+
+# ╔═╡ fb35ea81-cf4f-4adc-8591-7aeb3a869b8f
+md"""
+From elementary quantum mechanics, we know that a harmonic oscillator has equally spaced
+energy levels:
+
+  $E_k$ = (κ + $\frac{1}{2}$)ℎω  with κ = 0,1....
+
+
+where ħ = $\frac{h}{2π}$ is Planck’s constant and ω is the eigenfrequency of the oscillator. Suppose
+that we have a system of N independent harmonic oscillators. Each harmonic oscillator can emit
+a photon that can be absorbed immediately by another oscillator. In this system the individual
+oscillators may have different energies. A configuration of the system is given by (k1, k2, ..., $k_N$),
+where kn is the state of oscillator n. The energy of oscillator n is denoted by $E_(n)$ = $E_kn$
+. If the
+system is isolated, the total energy E is constant and is given by
+
+E = E (k1, k2, ..., $k_N$) = ∑$E_k$ = $E_0$ + ∑ħω$k_n$ = $E_0$ + ϵ∑$k_n$
+
+Here $E_0$ = Nħω/2 is the energy of N oscillators in the ground state. The example above with the
+three dice (question 2) corresponds to a system of N = 3 harmonic oscillators with ħω = ϵ = 1
+and $E_0$ = 0. In this example the individual energy levels are restricted to k = 1, 2 · · · 6 and
+the total energy is E = 12. The probability for each of the six possible energy distributions
+can be calculated explicitly. This is not possible in general. Using smart analytical approaches
+one may derive the form of the most probable distribution. The code simulates a system of N harmonic
+oscillators, each of which may have an energy E (n) = 0,ħω, 2ħω, · · · (note that we did not lose
+any information by choosing the ground state energy at E0 = 0), see Fig. 1.1. The total energy E
+and the number of oscillators N are input for the program. One step in the simulation consists
+of selecting two different oscillators A and B at random. Next, the program attempts to increase
+the energy of oscillator A by ħω and at the same time decrease the energy of B by ħω. If the
+energy of B becomes negative, the trial is rejected. Output of the program are “snapshots”, i.e.
+the energies of all individual oscillators, after t simulation steps.
+
 """
 
 # ╔═╡ 048c5cfb-04f2-4488-9997-035a87ee4da4
@@ -47,25 +66,6 @@ begin
 	println("Total Energy                                     : $Totalenergy")
 	println("Number Of Oscillators Used To Calculate Averages : $Group")
 end
-
-# ╔═╡ f7000470-7486-4498-952e-efe18aca4089
-md"""### Harmonic Oscillators"""
-
-# ╔═╡ fb35ea81-cf4f-4adc-8591-7aeb3a869b8f
-md"""
-From elementary quantum mechanics, we know that a harmonic oscillator has equally spaced
-energy levels:
-
-  $E_k$ = (κ + $\frac{1}{2}$)ℎω  with κ = 0,1....
-  
-where ¯h = h/ (2π) is Planck’s constant and ω is the eigenfrequency of the oscillator. Suppose
-that we have a system of N independent harmonic oscillators. Each harmonic oscillator can emit
-a photon that can be absorbed immediately by another oscillator. In this system the individual
-oscillators may have different energies. A configuration of the system is given by (k1, k2, ..., kN),
-where kn is the state of oscillator n. The energy of oscillator n is denoted by E (n) = Ekn
-. If the
-system is isolated, the total energy E is constant and is given by
-"""
 
 # ╔═╡ fad4cc45-b3a5-42bc-8e34-0f69abab5ae1
 begin
@@ -83,51 +83,18 @@ begin
 	end
 end
 
-# ╔═╡ 15fcde99-54bb-4736-b680-7f4bfef94a1c
-md"""
-Here E0 = Nhω/2 ¯ is the energy of N oscillators in the ground state. The example above with the
-three dice (question 2) corresponds to a system of N = 3 harmonic oscillators with ¯hω =  = 1
-and E0 = 0. In this example the individual energy levels are restricted to k = 1, 2 · · · 6 and
-the total energy is E = 12. The probability for each of the six possible energy distributions
-can be calculated explicitly. This is not possible in general. Using smart analytical approaches
-one may derive the form of the most probable distribution (see section 1.4). Before following
-this route we investigate the possible energy distributions “experimentally”, i.e. using a simple
-computer simulation (question 4). The computer program simulates a system of N harmonic
-oscillators, each of which may have an energy E (n) = 0,hω, 2 ¯ hω, ¯ · · · (note that we did not lose
-any information by choosing the ground state energy at E0 = 0), see Fig. 1.1. The total energy E
-and the number of oscillators N are input for the program. One step in the simulation consists
-of selecting two different oscillators A and B at random. Next, the program attempts to increase
-the energy of oscillator A by ¯hω and at the same time decrease the energy of B by ¯hω. If the
-energy of B becomes negative, the trial is rejected. Output of the program are “snapshots”, i.e.
-the energies of all individual oscillators, after t simulation steps.
-"""
-
 # ╔═╡ baef1d30-f765-424b-aaf7-467efb4894c0
-Oscillator = zeros(Int,Numberofoscillators)
-
-# ╔═╡ 9da8bf05-63c3-4464-8689-f091e3356b5f
-Distribution = zeros(Float64, Totalenergy + 1)
-
-# ╔═╡ 280ef48b-fb9f-4336-b9cb-928c027ee5ad
-Ninit = Numberofcycles ÷ 2
-
-# ╔═╡ 404d4b92-d07a-44cf-88b3-9ec6a268a75e
-Maxenergy = 100000
-
-# ╔═╡ cc142827-d85b-4c09-8053-e723304c2f4e
-Maxoscillators = 100000
-
-# ╔═╡ d585076c-fb35-412a-9d51-048c91e2fb79
-Energysum = 0.0
-
-# ╔═╡ 926ab91b-4984-4a6b-83b6-b7020be47831
-Energysum2 = 0.0
-
-# ╔═╡ 624e47ab-e1c5-42fa-9e91-2475cf66c680
-Count = 0.0
-
-# ╔═╡ 94f533a1-00c4-44f1-a1a9-277ef21018e6
-Utot = 0
+begin
+	Oscillator = zeros(Int,Numberofoscillators)
+	Distribution = zeros(Float64, Totalenergy + 1)
+	Ninit = Numberofcycles ÷ 2
+	Maxenergy = 100000
+	Maxoscillators = 100000
+	Energysum = 0.0
+	Energysum2 = 0.0
+	Count = 0.0
+	Utot = 0
+end
 
 # ╔═╡ 4b62b316-778f-4c8e-89ca-3b4eaff81413
 begin
@@ -225,15 +192,6 @@ zero(Utot)
 # ╔═╡ b5867102-0087-4531-a4a5-f4df0bd09d3b
 print(Et)
 
-# ╔═╡ 1cd7fbb0-de39-4382-9302-3270ee7918b8
-begin
-	anim2 = @animate for i in Et
-		p = (i, Numberofcycles)
-		histogram(p)
-	end
-	gif(anim2, "mygifff.gif", fps=1)
-end
-
 # ╔═╡ 17f6c6ac-7d23-47d9-a5f0-de7b8bfe2cb1
 for i in 1:Numberofoscillators
 	Utot = Utot + Oscillator[i]
@@ -255,8 +213,10 @@ for i in results
 	println(i)
 end
 
-# ╔═╡ 67cdb139-9e13-4e80-ab8e-598407d1eea9
-plot(results)
+# ╔═╡ 2cc6c8ed-2bc5-4478-98c1-ddf34273dfca
+begin
+	plot(results, yscale=:log10)
+end
 
 # ╔═╡ ab56eedb-cfa9-41c3-8aac-c00b5ced8db9
 begin
@@ -278,6 +238,21 @@ begin
 	          ylabel="Frequency", 
 	          legend=false)
 end
+
+# ╔═╡ d5d4c8f5-1987-476b-85c1-387dd088efe1
+begin
+	count = 0
+	for i in 1:10
+		count +=1
+	end
+	print(count)
+end
+
+# ╔═╡ 3600668c-f824-43bb-99b2-82c591800bca
+count2=4
+
+# ╔═╡ 1aa215eb-5838-43e5-a6b8-dcfdf95e3068
+print(count2)
 
 # ╔═╡ 23374288-849f-4359-a0d2-d21f8287e679
 html"""
@@ -1398,21 +1373,12 @@ version = "1.4.1+1"
 # ╟─873a88a2-1608-461f-b434-313ee52c9839
 # ╟─20d662db-e52b-4fa5-b835-9fd539f483b6
 # ╠═4f2520bc-ce65-4549-947a-6cf1adbf3d37
-# ╠═048c5cfb-04f2-4488-9997-035a87ee4da4
-# ╠═4d1693e5-847e-4e25-833c-921fedf37e5d
 # ╟─f7000470-7486-4498-952e-efe18aca4089
 # ╟─fb35ea81-cf4f-4adc-8591-7aeb3a869b8f
+# ╠═048c5cfb-04f2-4488-9997-035a87ee4da4
+# ╠═4d1693e5-847e-4e25-833c-921fedf37e5d
 # ╠═fad4cc45-b3a5-42bc-8e34-0f69abab5ae1
-# ╟─15fcde99-54bb-4736-b680-7f4bfef94a1c
 # ╠═baef1d30-f765-424b-aaf7-467efb4894c0
-# ╠═9da8bf05-63c3-4464-8689-f091e3356b5f
-# ╠═280ef48b-fb9f-4336-b9cb-928c027ee5ad
-# ╠═404d4b92-d07a-44cf-88b3-9ec6a268a75e
-# ╠═cc142827-d85b-4c09-8053-e723304c2f4e
-# ╠═d585076c-fb35-412a-9d51-048c91e2fb79
-# ╠═926ab91b-4984-4a6b-83b6-b7020be47831
-# ╠═624e47ab-e1c5-42fa-9e91-2475cf66c680
-# ╠═94f533a1-00c4-44f1-a1a9-277ef21018e6
 # ╠═4b62b316-778f-4c8e-89ca-3b4eaff81413
 # ╠═d1defbbf-3ac5-4ec7-ad81-d236fa5e7765
 # ╠═257dbbcd-ee14-49b9-b596-1e4c627f948a
@@ -1422,14 +1388,16 @@ version = "1.4.1+1"
 # ╠═d3f5117d-60f3-4a74-b233-9ac6ee452a3d
 # ╠═886bea7a-fd06-4547-b741-656e5f09bf92
 # ╠═b5867102-0087-4531-a4a5-f4df0bd09d3b
-# ╠═1cd7fbb0-de39-4382-9302-3270ee7918b8
 # ╠═17f6c6ac-7d23-47d9-a5f0-de7b8bfe2cb1
 # ╠═415df18c-75d6-4f2d-ad9c-06b1bcf2ce3f
 # ╠═55916675-22db-4bed-93dc-8ef1ab7f36ef
 # ╠═c865d842-7dd3-42aa-a397-ef42b4579240
-# ╠═67cdb139-9e13-4e80-ab8e-598407d1eea9
+# ╠═2cc6c8ed-2bc5-4478-98c1-ddf34273dfca
 # ╟─ab56eedb-cfa9-41c3-8aac-c00b5ced8db9
 # ╠═99e0bd9d-f935-4c1a-b460-beee315caa88
+# ╠═d5d4c8f5-1987-476b-85c1-387dd088efe1
+# ╠═3600668c-f824-43bb-99b2-82c591800bca
+# ╠═1aa215eb-5838-43e5-a6b8-dcfdf95e3068
 # ╟─23374288-849f-4359-a0d2-d21f8287e679
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
