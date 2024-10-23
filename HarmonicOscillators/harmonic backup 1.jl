@@ -26,7 +26,7 @@ md"""
 From elementary quantum mechanics, we know that a harmonic oscillator has equally spaced
 energy levels:
 
- $E_k$ = (κ + $\frac{1}{2}$)ℎω  with κ = 0,1....
+  $E_k$ = (κ + $\frac{1}{2}$)ℎω  with κ = 0,1....
 
 
 where ħ = $\frac{h}{2π}$ is Planck’s constant and ω is the eigenfrequency of the oscillator. Suppose
@@ -204,7 +204,7 @@ results = []
 for i in 1:Totalenergy
 	if Distribution[i] >= 0.5
 		k = Distribution[i] / Count2
-		push!(results, k)
+		push!(results, "$k")
 	end
 end
 
@@ -214,7 +214,9 @@ for i in results
 end
 
 # ╔═╡ 2cc6c8ed-2bc5-4478-98c1-ddf34273dfca
-plot(results)
+begin
+	plot(results)
+end
 
 # ╔═╡ ab56eedb-cfa9-41c3-8aac-c00b5ced8db9
 begin
@@ -237,17 +239,20 @@ begin
 	          legend=false)
 end
 
-# ╔═╡ 705020e4-2898-4a06-b1e0-c0cc2d24e9f8
+# ╔═╡ d5d4c8f5-1987-476b-85c1-387dd088efe1
 begin
-	indice2 = collect(1:length(Oscillator))
-	print(length(Oscillator))
-	
-	histogram(Distribution, Distribution/Numberofoscillators, bins=10, 
-	          title="Histogram of Distribution", 
-	          xlabel="Energy Levels", 
-	          ylabel="Frequency", 
-	          legend=false)
+	count = 0
+	for i in 1:10
+		count +=1
+	end
+	print(count)
 end
+
+# ╔═╡ 3600668c-f824-43bb-99b2-82c591800bca
+count2=4
+
+# ╔═╡ 1aa215eb-5838-43e5-a6b8-dcfdf95e3068
+print(count2)
 
 # ╔═╡ 23374288-849f-4359-a0d2-d21f8287e679
 html"""
@@ -1390,7 +1395,9 @@ version = "1.4.1+1"
 # ╠═2cc6c8ed-2bc5-4478-98c1-ddf34273dfca
 # ╟─ab56eedb-cfa9-41c3-8aac-c00b5ced8db9
 # ╠═99e0bd9d-f935-4c1a-b460-beee315caa88
-# ╠═705020e4-2898-4a06-b1e0-c0cc2d24e9f8
+# ╠═d5d4c8f5-1987-476b-85c1-387dd088efe1
+# ╠═3600668c-f824-43bb-99b2-82c591800bca
+# ╠═1aa215eb-5838-43e5-a6b8-dcfdf95e3068
 # ╟─23374288-849f-4359-a0d2-d21f8287e679
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
